@@ -33,4 +33,4 @@ async def embed(ctx):
     embed = disc.Embed(title = "Commands", description = "idk just someting yk", color = 0xFF5733)
     await ctx.send(embed = embed)
 
-client.run("MTA4MjQyMTExNTk0ODkwNDQ4MQ.GihIjO.pdsuuz9ngruOaTgAz6pOKqjQprpU3kk6nq3BM4")
+client.run("MTA4MjQyMTExNTk0ODkwNDQ4MQ.GBZQUI.ekLScAyTuqVHdlk5U-t7jkFXBluR1XrxBUXIvI")
