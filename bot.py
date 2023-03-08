@@ -53,7 +53,7 @@ async def question(ctx):
         message = await client.wait_for("message", check = lambda message: message.author == ctx.author, timeout=30) # 30 seconds to reply
         await ctx.send("working...")
         print("question >>>", message.content)
-        text = get_chatgpt_text(str(message.content))
+        text = await get_chatgpt_text(str(message.content))
         await ctx.send(text)
 
     except asyncio.TimeoutError:
@@ -95,4 +95,4 @@ async def custom_timed_message(ctx , thyime, idORname, *, msg):
     except UnboundLocalError:
         await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?")
 
-client.run(os.environ.get('Api-Token'))
+client.run(os.environ.get('Discord-Api-Token'))
