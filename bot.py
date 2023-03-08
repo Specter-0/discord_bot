@@ -4,6 +4,8 @@ from openai_bot import get_chatgpt_text
 
 intents = disc.Intents.default()
 intents.message_content = True
+intents.presences = True
+intents.members = True
 client = commands.Bot(command_prefix='!', intents = intents)
 
 @client.event
@@ -67,13 +69,28 @@ async def question(ctx):
         print("ran here")
 
 @client.command()
-async def LLT(ctx , thyime, *, msg = "gå å legg deg"):
+async def LukasLT(ctx , thyime, *, msg = "gå å legg deg"):
     id = 282928626431688704
     await func.checkifCTM(ctx, thyime, msg, id)
-    
 
 @client.command()  
-async def CTM(ctx , thyime, id, *, msg = "gå å legg deg"):
-    await func.checkifCTM(ctx, thyime, msg, id)
+async def custom_timed_message(ctx , thyime, idORname, *, msg):
+    try:
+        int(id)
+    except:
+        pass
+    else:
+        id = idORname
+
+    for user in client.get_all_members():
+        if str(user) == idORname:
+            id = user.id
+        elif str(user)[:-5] == idORname:
+            id = user.id
+
+    try:
+        await func.checkifCTM(ctx, thyime, msg, id)
+    except UnboundLocalError:
+        await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?")
 
 client.run("MTA4MjQyMTExNTk0ODkwNDQ4MQ.GBZQUI.ekLScAyTuqVHdlk5U-t7jkFXBluR1XrxBUXIvI")
