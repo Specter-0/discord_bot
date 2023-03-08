@@ -30,7 +30,7 @@ async def strCompare(client, idORname):
             if letterU in idORname:
                 score += 1
             index += 1
-            
+
         Dict[str(user)] = score
     return max(Dict, key=Dict.get)
 
