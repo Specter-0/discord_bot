@@ -1,6 +1,6 @@
-import discord as disc, requests, json, asyncio, functions as func, os
+import discord as disc, requests, json, asyncio, functions as func, os, thehub as hub
 from discord.ext import commands
-from openai_bot import get_chatgpt_text
+from openai import get_chatgpt_text
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -33,7 +33,9 @@ async def on_message(message):
 
 @client.command()
 async def embed(ctx):
-    embed = disc.Embed(title = "Commands", description = "idk just someting yk", color = 0xFF5733)
+    embed = disc.Embed(title = "testing embeds", description = "mby some text here", color = 0xFF5733)
+    embed.set_footer(text = "i am at the bottom")
+    embed.set_image(url = "https://i.imgur.com/B5eGX2M.png")
     await ctx.send(embed = embed)
 
 @client.command()
@@ -94,5 +96,14 @@ async def custom_timed_message(ctx , thyime, idORname, *, msg):
         await func.checkifCTM(ctx, thyime, msg, id)
     except UnboundLocalError:
         await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?")
+
+@client.command()  
+async def hub_get_star(ctx):
+    star = await hub.get_star()
+    embed = disc.Embed(title = star["name"], color = 0xFF5733)
+    embed.set_image(url = star["photo"])
+    await ctx.send(embed = embed)
+
+
 
 client.run(os.environ.get('Discord-Api-Token'))
