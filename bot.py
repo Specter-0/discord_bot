@@ -50,6 +50,8 @@ async def annoy(ctx):
 
 @client.command()
 async def question(ctx):
+    await ctx.send("koden her funket på et tidspunkt men har blit ødelakt av en opptatering idrk")
+    """
     try:
         await ctx.send("ask a question")
         message = await client.wait_for("message", check = lambda message: message.author == ctx.author, timeout=30) # 30 seconds to reply
@@ -68,14 +70,15 @@ async def question(ctx):
 
     except disc.errors.ConnectionClosed or disc.errors.ClientException:
         await ctx.send("Could not connect to open-ai servers")
+    """
 
 @client.command()
-async def LukasLT(ctx , thyime, *, msg = "gå å legg deg"):
+async def LukasLT(ctx , time, *, msg = "gå å legg deg"):
     id = 282928626431688704
-    await func.checkifCTM(ctx, thyime, msg, id)
+    await func.checkifCTM(ctx, time, msg, id)
 
 @client.command()  
-async def custom_timed_message(ctx , thyime, idORname, *, msg):
+async def custom_timed_message(ctx , time, idORname, *, msg):
     try:
         int(id)
     except:
@@ -90,7 +93,7 @@ async def custom_timed_message(ctx , thyime, idORname, *, msg):
             id = user.id
 
     try:
-        await func.checkifCTM(ctx, thyime, msg, id)
+        await func.checkifCTM(ctx, time, msg, id)
     except UnboundLocalError:
         await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?")
 
