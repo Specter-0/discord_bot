@@ -14,9 +14,9 @@ client = commands.Bot(command_prefix='!', intents = intents)
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
-#@client.event
-#async def on_command_error(ctx, error):
-    #await ctx.send(f"An error occured: {error}")
+@client.event
+async def on_command_error(ctx, error):
+    await ctx.send(f"An error occured: {error}")
 
 @client.event
 async def on_message(message):
@@ -66,11 +66,8 @@ async def question(ctx):
             await ctx.send(f"{text[:1900]} \n \nthis reply was cut down due to being to fucking long")
         print(error.__context__, "\n", error, "\n", error.code)
 
-    except disc.errors.ConnectionClosed:
+    except disc.errors.ConnectionClosed or disc.errors.ClientException:
         await ctx.send("Could not connect to open-ai servers")
-    
-    except disc.errors.ClientException:
-        print("ran here")
 
 @client.command()
 async def LukasLT(ctx , thyime, *, msg = "gå å legg deg"):
@@ -103,7 +100,5 @@ async def hub_get_star(ctx):
     embed = disc.Embed(title = star["name"], color = 0xFF5733)
     embed.set_image(url = star["photo"])
     await ctx.send(embed = embed)
-
-
 
 client.run(os.environ.get('Discord-Api-Token'))
