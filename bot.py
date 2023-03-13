@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix='!', intents = intents)
 async def on_ready():
     print('logged in as {0.user}'.format(client))
 
-@client.event
+@client.event 
 async def on_command_error(ctx, error):
     await ctx.send(f"Error, fuck you do?: {error}")
 
@@ -40,6 +40,8 @@ async def on_message(message):
         return
 
     elif message.content.startswith("hello"):
+        if message.author == "Specter#8073":
+            await message.channel.send("Hello master")     
         name = str(message.author)
         name = name[:-5]
         r = ww.RandomWord()
