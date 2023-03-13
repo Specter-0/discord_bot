@@ -1,6 +1,5 @@
-import discord as disc, requests, json, asyncio, functions as func, os, thehub as hub
+import discord as disc, functions as func, os, thehub as hub, wonderwords as ww, random as rn
 from discord.ext import commands
-from openai import get_chatgpt_text
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,23 +11,45 @@ client = commands.Bot(command_prefix='!', intents = intents)
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print('logged in as {0.user}'.format(client))
 
 @client.event
 async def on_command_error(ctx, error):
-    await ctx.send(f"An error occured: {error}")
+    await ctx.send(f"Error, fuck you do?: {error}")
 
 @client.event
 async def on_message(message):
     await client.process_commands(message)
-    
+    print("here")
+    random = rn.randint(1, 2)
+
+    if message.author == client.user:
+        return
+
+    elif random == 1:
+        print("here")
+        r = ww.RandomSentence()
+        sentance = r.sentence()   
+        await message.channel.send(sentance)   
+
+@client.event
+async def on_message(message):
+    await client.process_commands(message)
+
     if message.author == client.user:
         return
 
     elif message.content.startswith("hello"):
         name = str(message.author)
         name = name[:-5]
-        await message.channel.send(f"Hello {name} please go fuck yourself")     
+        r = ww.RandomWord()
+        word = r.word(include_parts_of_speech = ["verb"])   
+        await message.channel.send(f"Hello {name} please go {word} yourself")  
+
+    if rn.randint(1, 5) == 1:
+        w = ww.RandomSentence()
+        s = w.bare_bone_with_adjective()
+        await message.channel.send(s)     
 
 
 @client.command()
@@ -80,17 +101,15 @@ async def LukasLT(ctx , time, *, msg = "gå å legg deg"):
 @client.command()  
 async def custom_timed_message(ctx , time, idORname, *, msg):
     try:
-        int(id)
+        int(idORname)
     except:
-        pass
+        for user in client.get_all_members():
+            if str(user) == idORname:
+                id = user.id
+            elif str(user)[:-5] == idORname:
+                id = user.id
     else:
         id = idORname
-
-    for user in client.get_all_members():
-        if str(user) == idORname:
-            id = user.id
-        elif str(user)[:-5] == idORname:
-            id = user.id
 
     try:
         await func.checkifCTM(ctx, time, msg, id)

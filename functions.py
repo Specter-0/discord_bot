@@ -1,4 +1,4 @@
-import discord as disc, json, requests, time as Time, asyncio
+import discord as disc, json, requests, asyncio
 from datetime import datetime
 
 def get_joke():
@@ -17,7 +17,7 @@ async def checkifCTM(ctx, time, msg, id):
     await asyncio.sleep(2)
     return await checkifCTM(ctx, time, msg, id)
 
-async def strCompare(client, idORname):
+async def strCompare(client, name):
     long_name = {}
     for user in client.get_all_members():
         long_name[(str(user))] = len(str(user))
@@ -25,29 +25,25 @@ async def strCompare(client, idORname):
 
     Dict = {}
     for user in client.get_all_members():
-        score = 0 
-        length = 0
-        usable_idORname = idORname
+        favør = 0 
+        usable_name = name
 
-        if len(str(user)[:-5]) == len(idORname):
-            score += 2
+        if len(str(user)[:-5]) == len(name):
+            favør += 2
 
         for letterU in str(user):
-            try:
-                if letterU in usable_idORname:
-                    score += 1
-                    usable_idORname = usable_idORname.replace(letterU, "", 1)
-                else:
-                    score -= 1
-            except IndexError:
-                print(user)
-                score -= 2
-            length += 1
-        print(longest_name_len + length)
-        score += longest_name_len + length
-        Dict[str(user)] = score
+            if letterU in usable_name:
+                favør += 1
+                usable_name = usable_name.replace(letterU, "", 1)
+            else:
+                favør -= 1
 
-    print(Dict)
+        favør += longest_name_len + len(str(user))
+        Dict[str(user)] = favør
+
+    #print(Dict)
     return max(Dict, key=Dict.get)
+
+    
 
 
