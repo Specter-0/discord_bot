@@ -1,7 +1,11 @@
 import json 
 import pandas as pd
 import requests
-  
+
+#WARNING!!!
+#dette er ikke min kode, jeg bare ekspriminterer med reddit api ;) 
+
+
 subreddit = 'python'
 limit = 100
 timeframe = 'month' #hour, day, week, month, year, all
