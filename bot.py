@@ -1,4 +1,4 @@
-import discord as disc, functions as func, os, thehub as hub, wonderwords as ww, random as rn
+import discord as disc, functions as func, os, wonderwords as ww, random as rn
 import chatgpt as Cgpt, asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -102,9 +102,9 @@ async def LukasLT(ctx , time, *, msg = "gå å legg deg"):
 @client.command() # custom message that will be sent at a given time
 async def custom_timed_message(ctx , time, idORname, *, msg):
     try:
-        int(idORname)
+        int(idORname) # if idORname can be converted to an int then it won't run the name finder
     except:
-        for user in client.get_all_members():
+        for user in client.get_all_members(): # finds the correct person by cyceling trho all members and comparing them too idORname
             if str(user) == idORname:
                 id = user.id
             elif str(user)[:-5] == idORname:
@@ -113,11 +113,11 @@ async def custom_timed_message(ctx , time, idORname, *, msg):
         id = idORname
 
     try:
-        await func.checkifCTM(ctx, time, msg, id)
-    except UnboundLocalError:
-        await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?")
+        await func.checkifCTM(ctx, time, msg, id) # c functions
+    except UnboundLocalError: # if name not found runs this
+        await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?") # c functions
 
-#ikke tenk på denne :)
+""" ikke tenk på denne :)
 @client.command()  
 @commands.is_owner()
 async def hub_get_star(ctx):
@@ -125,5 +125,6 @@ async def hub_get_star(ctx):
     embed = disc.Embed(title = star["name"], color = 0xFF5733)
     embed.set_image(url = star["photo"])
     await ctx.send(embed = embed)
+"""
 
 client.run(os.environ.get('Discord-Api-Token')) # discord api token hidden using a .env file
