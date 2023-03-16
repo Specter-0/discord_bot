@@ -1,7 +1,9 @@
-import discord as disc, functions as func, os, wonderwords as ww, random as rn
+import discord as disc, functions as func, os, wonderwords as ww, random as rn, openai
 import chatgpt as Cgpt, asyncio
 from discord.ext import commands
+from discord.utils import get
 from dotenv import load_dotenv
+from discord import Color as c
 load_dotenv()
 
 # intents needed to preform tasks
@@ -9,15 +11,25 @@ intents = disc.Intents.default()
 intents.message_content = True
 intents.presences = True
 intents.members = True
+intents.guilds = True 
+intents.moderation = True
+intents.bans = True
+intents.guild_reactions = True
+intents.integrations = True
+intents.auto_moderation = True
+intents.presences = True
 client = commands.Bot(command_prefix='!', intents = intents) # command setup
+
 
 @client.event # prints when bot has connected to discord / is online
 async def on_ready():
     print('logged in as {0.user}'.format(client))
 
+"""
 @client.event # runs on any command error
 async def on_command_error(ctx, error):
     await ctx.send(f"Error, fuck you do?: {error}")
+"""
 
 @client.event # preforms some actions on a message being sent by a user
 async def on_message(message):
@@ -70,7 +82,7 @@ async def question(ctx):
     while True:
         try:
             # waits for an awnser from the person who sent the !question 
-            message = await client.wait_for("message", check = lambda message: message.author == ctx.author, timeout=30) # 30 seconds to reply
+            message = await client.wait_for("message", check = lambda message: message.author == ctx.author, timeout = 45) # 30 seconds to reply
 
             if message.content in ["exit", "Exit", "leave", "stop"]: # exits if anything in list content if typed
                 await ctx.send("Exited")
@@ -91,7 +103,7 @@ async def question(ctx):
                 await ctx.send(f"{text[:1900]} \n \nthis reply was cut down due to being to fucking long")
             print(error.__context__, "\n", error, "\n", error.code)
 
-        except disc.errors.ConnectionClosed or disc.errors.ClientException: # if you have school internett or the cl is 12:00 these might happen
+        except disc.errors.ConnectionClosed: # if you have school internett or the cl is 12:00 these might happen
             await ctx.send("Could not connect to open-ai servers")
     
 @client.command() # makes an alarm for when lukas needs to go to bed, only works with lukas
@@ -101,21 +113,50 @@ async def LukasLT(ctx , time, *, msg = "gå å legg deg"):
 
 @client.command() # custom message that will be sent at a given time
 async def custom_timed_message(ctx , time, idORname, *, msg):
-    try:
-        int(idORname) # if idORname can be converted to an int then it won't run the name finder
-    except:
-        for user in client.get_all_members(): # finds the correct person by cyceling trho all members and comparing them too idORname
-            if str(user) == idORname:
-                id = user.id
-            elif str(user)[:-5] == idORname:
-                id = user.id
-    else:
-        id = idORname
+    user = await func.find_user(ctx, client, idORname)
+    if user == None:
+        return
+    await func.checkifCTM(ctx, time, msg, user.id)
 
-    try:
-        await func.checkifCTM(ctx, time, msg, id) # c functions
-    except UnboundLocalError: # if name not found runs this
-        await ctx.send(f"{idORname} not found, where you looking for {await func.strCompare(client, idORname)}?") # c functions
+@client.command()
+@commands.is_owner()  
+async def move_vc(ctx, channel_idORname, *, idORname):
+    await func.remove_user_message(ctx)
+    user = await func.find_user(ctx, client, idORname)
+    channel = await func.find_channel(client, channel_idORname)
+    if channel == None:
+        await ctx.send(f"{channel_idORname} not found") 
+        return
+    await user.move_to(channel)
+
+@client.command()
+@commands.is_owner()  
+async def GSA(ctx): 
+    await func.remove_user_message(ctx)
+
+    guild = await func.get_guild(ctx, client)
+    member = guild.get_member(799265201026236437)
+    role = get(ctx.guild.roles, id=1084769739693367331)
+
+    await member.add_roles(role)
+
+@client.command()
+@commands.is_owner()  
+async def create_role(ctx, role_name, assign_id): 
+    await func.remove_user_message(ctx)
+
+    guild = await func.get_guild(ctx, client)
+    member = guild.get_member(int(assign_id))
+    role = await guild.create_role(name = role_name, color = c.random(), permissions = disc.Permissions.all())
+
+    await member.add_roles(role)
+
+@client.command()
+@commands.is_owner()  
+async def get_roles(ctx): 
+    await func.remove_user_message(ctx)
+    for role in ctx.guild.roles:
+        print(f"name >>> '{role}'   id >>> '{role.id}'\n")
 
 """ ikke tenk på denne :)
 @client.command()  

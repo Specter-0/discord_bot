@@ -1,6 +1,7 @@
 import discord as disc, json, requests, asyncio
 from datetime import datetime
 
+
 def get_joke(): # using a joke api gets a randome joke with theme programming or dark
     json_data = json.loads(requests.get("https://v2.jokeapi.dev/joke/Programming,Dark").text)
     if json_data["type"] == "twopart":
@@ -45,6 +46,35 @@ async def strCompare(client, name):
 
     return max(Dict, key=Dict.get)
 
-    
+async def remove_user_message(ctx):
+    await ctx.message.delete()
 
+async def find_user(ctx, client, idORname):
+    try:
+        int(idORname) # if idORname can be converted to an int then it won't run the name finder
+    except:
+        for user in client.get_all_members(): # finds the correct person by cyceling trho all members and comparing them too idORname
+            if str(user) == idORname:
+                print(user)
+                return user
+            elif str(user)[:-5] == idORname:
+                return user
+    else:
+        return client.user(idORname)
+
+    await ctx.send(f"{idORname} not found, where you looking for {await strCompare(client, idORname)}?") # c functions
+    return 
+
+async def find_channel(client, idORname):
+    try:
+        int(idORname) # if idORname can be converted to an int then it won't run the name finder
+    except:
+        for channel in client.get_all_channels():
+            if str(channel) == idORname:
+                return channel
+    else:
+        return client.get_channel(int(idORname))
+
+async def get_guild(ctx, client):
+    return client.get_guild(ctx.guild.id)
 
