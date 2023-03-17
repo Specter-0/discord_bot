@@ -1,4 +1,4 @@
-import discord as disc, functions as func, os, wonderwords as ww, random as rn, openai
+import discord as disc, functions as func, os, wonderwords as ww, random as rn, Nasa
 import chatgpt as Cgpt, asyncio
 from discord.ext import commands
 from discord.utils import get
@@ -94,7 +94,7 @@ async def question(ctx):
             text = await Cgpt.get_chatgpt_text(str(message.content)) # sends the message to chat gpt file and waits for reply
             await ctx.send(text) # sends reply to chat
 
-        except asyncio.TimeoutError: # if takes more then 30 sec to reply
+        except asyncio.TimeoutError: # if takes more then 45 sec to reply
             await ctx.send("Timeout exit") 
             return
 
@@ -119,7 +119,6 @@ async def custom_timed_message(ctx , time, idORname, *, msg):
     await func.checkifCTM(ctx, time, msg, user.id)
 
 @client.command()
-@commands.is_owner()  
 async def move_vc(ctx, channel_idORname, *, idORname):
     await func.remove_user_message(ctx)
     user = await func.find_user(ctx, client, idORname)
@@ -128,6 +127,15 @@ async def move_vc(ctx, channel_idORname, *, idORname):
         await ctx.send(f"{channel_idORname} not found") 
         return
     await user.move_to(channel)
+
+@client.command()
+async def nasa_daily_image(ctx):
+    data = await Nasa.get_nasa_image()
+
+    embed = disc.Embed(title = data["title"], description = data["explanation"], color = 0xFF5733) # setup
+    embed.set_footer(text = data["date"])
+    embed.set_image(url = data["hdurl"]) 
+    await ctx.send(embed = embed) 
 
 @client.command()
 @commands.is_owner()  
