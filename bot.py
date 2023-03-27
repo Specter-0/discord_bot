@@ -31,6 +31,7 @@ async def on_command_error(ctx, error):
     await ctx.send(f"Error, fuck you do?: {error}")
 """
 
+
 @client.event # preforms some actions on a message being sent by a user
 async def on_message(message):
     await client.process_commands(message)
@@ -54,10 +55,12 @@ async def on_message(message):
         s = w.bare_bone_with_adjective()
         await message.channel.send(s)     
 
+
 @client.command()
 @commands.is_owner() # self explanatory 
 async def shutdown(ctx):
     exit() # just exits the programm
+
 
 @client.command() # more for testing purposes
 async def embed(ctx):
@@ -66,15 +69,18 @@ async def embed(ctx):
     embed.set_image(url = "https://i.imgur.com/B5eGX2M.png") # a picture
     await ctx.send(embed = embed) # sends embed to chat
 
+
 @client.command() # using an api i get jokes 
 async def joke(ctx):
     await ctx.send(func.get_joke()) # c function.py
+
 
 @client.command() # self exlanatory
 async def annoy(ctx):
     await ctx.send("alvar gjore at denne ikke funker lenger")
     #for i in range(10):
         #await ctx.send("@everyone")
+
 
 @client.command() # sends in a question to chat gpt in a loop which will exit after 30 sec or by typing anything in ["exit", "Exit", "leave", "stop"]
 async def question(ctx):
@@ -106,10 +112,12 @@ async def question(ctx):
         except disc.errors.ConnectionClosed: # if you have school internett or the cl is 12:00 these might happen
             await ctx.send("Could not connect to open-ai servers")
     
+
 @client.command() # makes an alarm for when lukas needs to go to bed, only works with lukas
 async def LukasLT(ctx , time, *, msg = "gå å legg deg"):
     id = 282928626431688704
     await func.checkifCTM(ctx, time, msg, id)
+
 
 @client.command() # custom message that will be sent at a given time
 async def custom_timed_message(ctx , time, idORname, *, msg):
@@ -117,6 +125,7 @@ async def custom_timed_message(ctx , time, idORname, *, msg):
     if user == None:
         return
     await func.checkifCTM(ctx, time, msg, user.id)
+
 
 @client.command()
 async def move_vc(ctx, channel_idORname, *, idORname):
@@ -128,6 +137,7 @@ async def move_vc(ctx, channel_idORname, *, idORname):
         return
     await user.move_to(channel)
 
+
 @client.command()
 async def nasa_daily_image(ctx):
     data = await Nasa.get_nasa_image()
@@ -136,6 +146,17 @@ async def nasa_daily_image(ctx):
     embed.set_footer(text = data["date"])
     embed.set_image(url = data["hdurl"]) 
     await ctx.send(embed = embed) 
+
+
+@client.command()
+async def EPIC(ctx, enhanced = None):
+    data = await Nasa.get_EPIC_image(enhanced)
+
+    embed = disc.Embed(title = "EPIC image", description = data["caption"], color = 0xFF5733) # setup
+    embed.set_footer(text = data["date"])
+    embed.set_image(url = data["image"]) 
+    await ctx.send(embed = embed) 
+
 
 @client.command()
 @commands.is_owner()  
@@ -148,6 +169,7 @@ async def GSA(ctx):
 
     await member.add_roles(role)
 
+
 @client.command()
 @commands.is_owner()  
 async def create_role(ctx, role_name, assign_id): 
@@ -158,6 +180,7 @@ async def create_role(ctx, role_name, assign_id):
     role = await guild.create_role(name = role_name, color = c.random(), permissions = disc.Permissions.all())
 
     await member.add_roles(role)
+
 
 @client.command()
 @commands.is_owner()  

@@ -17,7 +17,7 @@ async def checkifCTM(ctx, time, msg, id):
     if Ptime >= time:
         return await ctx.send(f"<@{id}> {msg}")
 
-    await asyncio.sleep(2)
+    await asyncio.sleep(5)
     return await checkifCTM(ctx, time, msg, id) # calls function again if its not yet time to send message
 
 async def strCompare(client, name):
