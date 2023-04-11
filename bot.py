@@ -31,7 +31,6 @@ async def on_command_error(ctx, error):
     await ctx.send(f"Error, fuck you do?: {error}")
 """
 
-
 @client.event # preforms some actions on a message being sent by a user
 async def on_message(message):
     await client.process_commands(message)
